@@ -18,84 +18,83 @@ func Reset() {
 // --------------------------------------------------------------------------------------------------------------
 // Bool
 // --------------------------------------------------------------------------------------------------------------
-func AddBoolSetting(flagSet *pflag.FlagSet, name string, description string) {
-	AddBoolSettingP(flagSet, name, "", description)
+func AddBoolSetting(flagSet *pflag.FlagSet, name string, cmdline string, description string) {
+	AddBoolSettingP(flagSet, name, cmdline, "", description)
 }
 
-func AddBoolSettingP(flagSet *pflag.FlagSet, name string, shorthand string, description string) {
-	addSetting(flagSet, name, func() { flagSet.BoolP(name, shorthand, false, description) })
+func AddBoolSettingP(flagSet *pflag.FlagSet, name string, cmdline string, shorthand string, description string) {
+	addSetting(flagSet, name, func() string{ flagSet.BoolP(cmdline, shorthand, false, description);return cmdline })
 }
 
 // --------------------------------------------------------------------------------------------------------------
 // Int
 // --------------------------------------------------------------------------------------------------------------
 
-func AddIntSetting(flagSet *pflag.FlagSet, name string, description string) {
-	AddIntSettingP(flagSet, name, "", description)
+func AddIntSetting(flagSet *pflag.FlagSet, name string, cmdline string, description string) {
+	AddIntSettingP(flagSet, name, cmdline, "", description)
 }
 
-func AddIntSettingP(flagSet *pflag.FlagSet, name string, shorthand string, description string) {
-	AddIntSettingPD(flagSet, name, shorthand, 0, description)
+func AddIntSettingP(flagSet *pflag.FlagSet, name string, cmdline string, shorthand string, description string) {
+	AddIntSettingPD(flagSet, name, cmdline, shorthand, 0, description)
 }
 
-func AddIntSettingD(flagSet *pflag.FlagSet, name string, defaultVal int, description string) {
-	AddIntSettingPD(flagSet, name, "", defaultVal, description)
+func AddIntSettingD(flagSet *pflag.FlagSet, name string, cmdline string, defaultVal int, description string) {
+	AddIntSettingPD(flagSet, name, cmdline, "", defaultVal, description)
 }
 
-func AddIntSettingPD(flagSet *pflag.FlagSet, name string, shorthand string, defaultVal int, description string) {
-	addSetting(flagSet, name, func() { flagSet.IntP(name, shorthand, defaultVal, description) })
+func AddIntSettingPD(flagSet *pflag.FlagSet, name string, cmdline string, shorthand string, defaultVal int, description string) {
+	addSetting(flagSet, name, func() string{ flagSet.IntP(cmdline, shorthand, defaultVal, description);return cmdline })
 }
 
 // --------------------------------------------------------------------------------------------------------------
 // String
 // --------------------------------------------------------------------------------------------------------------
-func AddStringSetting(flagSet *pflag.FlagSet, name string, description string) {
-	AddStringSettingP(flagSet, name, "", description)
+func AddStringSetting(flagSet *pflag.FlagSet, name string, cmdline string, description string) {
+	AddStringSettingP(flagSet, name, cmdline, "", description)
 }
 
-func AddStringSettingP(flagSet *pflag.FlagSet, name string, shorthand string, description string) {
-	AddStringSettingPD(flagSet, name, shorthand, "", description)
+func AddStringSettingP(flagSet *pflag.FlagSet, name string, cmdline string, shorthand string, description string) {
+	AddStringSettingPD(flagSet, name, cmdline, shorthand, "", description)
 }
 
-func AddStringSettingD(flagSet *pflag.FlagSet, name string, defaultVal string, description string) {
-	AddStringSettingPD(flagSet, name, "", defaultVal, description)
+func AddStringSettingD(flagSet *pflag.FlagSet, name string, cmdline string, defaultVal string, description string) {
+	AddStringSettingPD(flagSet, name, cmdline, "", defaultVal, description)
 }
 
-func AddStringSettingPD(flagSet *pflag.FlagSet, name string, shorthand string, defaultVal string, description string) {
-	addSetting(flagSet, name, func() { flagSet.StringP(name, shorthand, defaultVal, description) })
+func AddStringSettingPD(flagSet *pflag.FlagSet, name string, cmdline string, shorthand string, defaultVal string, description string) {
+	addSetting(flagSet, name, func() string { flagSet.StringP(cmdline, shorthand, defaultVal, description);return cmdline })
 }
 
 // --------------------------------------------------------------------------------------------------------------
 // StringArray
 // --------------------------------------------------------------------------------------------------------------
-func AddStringArraySetting(flagSet *pflag.FlagSet, name string, description string) {
-	AddStringArraySettingP(flagSet, name, "", description)
+func AddStringArraySetting(flagSet *pflag.FlagSet, name string, cmdline string, description string) {
+	AddStringArraySettingP(flagSet, name, cmdline, "", description)
 }
 
-func AddStringArraySettingP(flagSet *pflag.FlagSet, name string, shorthand string, description string) {
-	AddStringArraySettingPD(flagSet, name, shorthand, []string{}, description)
+func AddStringArraySettingP(flagSet *pflag.FlagSet, name string, cmdline string, shorthand string, description string) {
+	AddStringArraySettingPD(flagSet, name, cmdline, shorthand, []string{}, description)
 }
 
-func AddStringArraySettingD(flagSet *pflag.FlagSet, name string, defaultVal []string, description string) {
-	AddStringArraySettingPD(flagSet, name, "", defaultVal, description)
+func AddStringArraySettingD(flagSet *pflag.FlagSet, name string, cmdline string, defaultVal []string, description string) {
+	AddStringArraySettingPD(flagSet, name, cmdline, "", defaultVal, description)
 }
 
-func AddStringArraySettingPD(flagSet *pflag.FlagSet, name string, shorthand string, defaultVal []string, description string) {
-	addSetting(flagSet, name, func() { flagSet.StringArrayP(name, shorthand, defaultVal, description) })
+func AddStringArraySettingPD(flagSet *pflag.FlagSet, name string, cmdline string, shorthand string, defaultVal []string, description string) {
+	addSetting(flagSet, name, func() string { flagSet.StringArrayP(cmdline, shorthand, defaultVal, description);return cmdline })
 }
 
 // --------------------------------------------------------------------------------------------------------------
 // Common
 // --------------------------------------------------------------------------------------------------------------
-func addSetting(flagSet *pflag.FlagSet, name string, createFlag func()) {
+func addSetting(flagSet *pflag.FlagSet, name string, createFlag func() string) {
 	if flag, ok := flags[name]; ok {
 		// TODO [Improvement] - check type is the same
 		// Add existing flag
 		flagSet.AddFlag(flag)
 	} else {
 		// Create new flag
-		createFlag()
-		flag = flagSet.Lookup(name)
+		flag = flagSet.Lookup(createFlag())
 		// Bind to viper
 		if err := viper.BindPFlag(name, flag); err != nil {
 			log.Fatal("Unable to bind flag:", err)
