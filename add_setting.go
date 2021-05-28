@@ -1,8 +1,6 @@
 package viperEx
 
 import (
-	"log"
-
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
 )
@@ -23,7 +21,7 @@ func AddBoolSetting(flagSet *pflag.FlagSet, name string, cmdline string, descrip
 }
 
 func AddBoolSettingP(flagSet *pflag.FlagSet, name string, cmdline string, shorthand string, description string) {
-	addSetting(flagSet, name, func() string{ flagSet.BoolP(cmdline, shorthand, false, description);return cmdline })
+	addSetting(flagSet, name, func() string { flagSet.BoolP(cmdline, shorthand, false, description); return cmdline })
 }
 
 // --------------------------------------------------------------------------------------------------------------
@@ -43,7 +41,7 @@ func AddIntSettingD(flagSet *pflag.FlagSet, name string, cmdline string, default
 }
 
 func AddIntSettingPD(flagSet *pflag.FlagSet, name string, cmdline string, shorthand string, defaultVal int, description string) {
-	addSetting(flagSet, name, func() string{ flagSet.IntP(cmdline, shorthand, defaultVal, description);return cmdline })
+	addSetting(flagSet, name, func() string { flagSet.IntP(cmdline, shorthand, defaultVal, description); return cmdline })
 }
 
 // --------------------------------------------------------------------------------------------------------------
@@ -62,7 +60,7 @@ func AddStringSettingD(flagSet *pflag.FlagSet, name string, cmdline string, defa
 }
 
 func AddStringSettingPD(flagSet *pflag.FlagSet, name string, cmdline string, shorthand string, defaultVal string, description string) {
-	addSetting(flagSet, name, func() string { flagSet.StringP(cmdline, shorthand, defaultVal, description);return cmdline })
+	addSetting(flagSet, name, func() string { flagSet.StringP(cmdline, shorthand, defaultVal, description); return cmdline })
 }
 
 // --------------------------------------------------------------------------------------------------------------
@@ -81,7 +79,7 @@ func AddStringArraySettingD(flagSet *pflag.FlagSet, name string, cmdline string,
 }
 
 func AddStringArraySettingPD(flagSet *pflag.FlagSet, name string, cmdline string, shorthand string, defaultVal []string, description string) {
-	addSetting(flagSet, name, func() string { flagSet.StringArrayP(cmdline, shorthand, defaultVal, description);return cmdline })
+	addSetting(flagSet, name, func() string { flagSet.StringArrayP(cmdline, shorthand, defaultVal, description); return cmdline })
 }
 
 // --------------------------------------------------------------------------------------------------------------
@@ -90,15 +88,7 @@ func AddStringArraySettingPD(flagSet *pflag.FlagSet, name string, cmdline string
 func addSetting(flagSet *pflag.FlagSet, name string, createFlag func() string) {
 	if flag, ok := flags[name]; ok {
 		// TODO [Improvement] - check type is the same
-		// Add existing flag
-		flagSet.AddFlag(flag)
-	} else {
-		// Create new flag
-		flag = flagSet.Lookup(createFlag())
-		// Bind to viper
-		if err := viper.BindPFlag(name, flag); err != nil {
-			log.Fatal("Unable to bind flag:", err)
-		}
+
 		// Store for next time
 		flags[name] = flag
 	}
