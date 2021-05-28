@@ -1,9 +1,9 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Build" type="GoApplicationRunConfiguration" factoryName="Go Application">
+  <configuration default="false" name="Build v1" type="GoApplicationRunConfiguration" factoryName="Go Application">
     <module name="viperEx" />
-    <working_directory value="$PROJECT_DIR$/v2" />
+    <working_directory value="$PROJECT_DIR$" />
     <kind value="PACKAGE" />
-    <package value="github.com/atrico-go/viperEx/v2" />
+    <package value="github.com/atrico-go/viperEx" />
     <directory value="$PROJECT_DIR$" />
     <filePath value="$PROJECT_DIR$" />
     <option name="run" value="false" />
