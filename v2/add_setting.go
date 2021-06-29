@@ -104,7 +104,7 @@ func (b *intSetting) DefaultVal(defaultValue int) IntSettingBuilder {
 }
 
 func (b *intSetting) AddTo(flagSet *pflag.FlagSet) {
-	addSetting(flagSet, b.envVar, b.name, func() string { flagSet.IntP(b.cmdline, b.shortcut, b.defaultVal, b.description); return b.cmdline })
+	addSetting(flagSet, b.name, b.envVar, func() string { flagSet.IntP(b.cmdline, b.shortcut, b.defaultVal, b.description); return b.cmdline })
 }
 
 // --------------------------------------------------------------------------------------------------------------
